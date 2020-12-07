@@ -1,0 +1,12 @@
+{
+  "additionalFiles": "..,..,..,..,..,..,..",
+  "builtInLibrariesFolders": "/opt/arduino-1.8.13/libraries",
+  "builtInToolsFolders": "/opt/arduino-1.8.13/tools-builder,/home/neale/.arduino15/packages",
+  "compiler.optimization_flags": "",
+  "customBuildProperties": "",
+  "fqbn": "arduino:avr:micro",
+  "hardwareFolders": "/home/neale/.arduino15/packages,/opt/arduino-1.8.13/hardware,/home/neale/.arduino15/packages",
+  "otherLibrariesFolders": "/home/neale/Arduino/libraries",
+  "runtime.ide.version": "10813",
+  "sketchLocation": "/home/neale/Arduino/puzzle_box/puzzle_box.ino"
+}
