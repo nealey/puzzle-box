@@ -121,10 +121,35 @@ CHSV loop_morse(bool fg) {
   return color;
 }
 
+#define UP 24
+#define DOWN 25
+#define RIGHT 26
+#define LEFT 27
+#define IN 15
+#define OUT 9
+const char KonamiCode[] = {
+    UP,
+    UP,
+    DOWN,
+    DOWN,
+    LEFT,
+    RIGHT,
+    LEFT,
+    RIGHT,
+    IN,
+    OUT,
+    0,
+};
 CHSV loop_konami(bool fg) {
+  static bool solved = false;
+  static int pos = 0;
   static Pulse pulse = Pulse(100);
   CHSV color;
   uint8_t gesture;
+
+  if (solved) {
+    return ColorSolved;
+  }
 
   uint8_t prox = 0;
   if (!paj7620ReadReg(0x6c, 1, &prox)) {
@@ -145,35 +170,45 @@ CHSV loop_konami(bool fg) {
       case 0:
         break;
       case GES_UP_FLAG:
-        out = 26;  // right
+        out = RIGHT;
         break;
       case GES_DOWN_FLAG:
-        out = 27;  // left
+        out = LEFT;
         break;
       case GES_RIGHT_FLAG:
-        out = 25;  // down
+        out = DOWN;
         break;
       case GES_LEFT_FLAG:
-        out = 24;  // up
+        out = UP;
         break;
       case GES_FORWARD_FLAG:
-        out = 15;
+        out = IN;
         break;
       case GES_BACKWARD_FLAG:
-        out = 9;
+        out = OUT;
         break;
       default:
-        out = '?';
-        display.fillRect(0, 32, 15, 8, 0);
-        display.setCursor(0, 32);
-        display.print(gesture);
+        // out = '?';
         break;
     }
     if (out) {
-      display.fillRect(0, 40, 5, 8, 0);
-      display.setCursor(0, 40);
+      if (out == KonamiCode[pos]) {
+        display.fillRect(pos*6, 40, 6, 8, 0);
+        display.setCursor(pos * 6, 40);
+        ++pos;
+      } else {
+        display.fillRect(0, 40, 84, 8, 0);
+        display.setCursor(0, 40);
+        pos = 0;
+      }
       display.print(out);
     }
+  }
+
+  if (KonamiCode[pos] == 0) {
+    solved = true;
+    mp.Play(120 * 4, TUNE_YAY);
+    color = ColorSolved;
   }
   display.display();
 
