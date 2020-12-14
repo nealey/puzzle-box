@@ -9,11 +9,18 @@ Pulse::Pulse(unsigned long period) {
 
 bool Pulse::Tick() {
   unsigned long now = millis();
-  
+
   if (now >= nextEventMillis) {
-    nextEventMillis = now + period;
+    Until(period, now);
     return true;
   }
-  
   return false;
+}
+
+void Pulse::Until(unsigned long next, unsigned long now) {
+  nextEventMillis = now + next;
+}
+
+void Pulse::Until(unsigned long next) {
+  Until(next, millis());
 }

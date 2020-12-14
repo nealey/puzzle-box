@@ -9,9 +9,6 @@
 
 // Frequencies in octave 7
 const uint16_t freqs[] = {
-    3520,  // A
-    3729,  // A#
-    3951,  // B
     2093,  // C
     2217,  // C#
     2349,  // D
@@ -21,6 +18,9 @@ const uint16_t freqs[] = {
     2960,  // F#
     3136,  // G
     3322,  // G#
+    3520,  // A
+    3729,  // A#
+    3951,  // B
 };
 
 const int scale[] = {
@@ -99,11 +99,15 @@ OCTAVE_DONE:
       tune = NULL;
       NoTone();
       return false;
-    case 'a' ... 'g':
+    case 'a' ... 'b':
+      ++octave;
+    case 'c' ... 'g':
       ++octave;
       note = scale[*tune - 'a'] + (12 * octave);
       break;
-    case 'A' ... 'G':
+    case 'A' ... 'B':
+      ++octave;
+    case 'C' ... 'G':
       note = scale[*tune - 'A'] + (12 * octave);
       break;
     case '_':
